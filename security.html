@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>หน้า 5: ระบบกันขโมยอัจฉริยะ + Camera Pi 3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="security">
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="badge-pi">ALARM+CAM3</span>
+        <h1>Raspberry Pi Lab</h1>
+      </div>
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn">1. ข้อมูล RPi</a>
+        <a href="gpio.html" class="tab-btn">2. ขา GPIO</a>
+        <a href="led.html" class="tab-btn">LED Lab</a>
+        <a href="sensors.html" class="tab-btn">3. เซนเซอร์ DHT11</a>
+        <a href="lcd-buzzer.html" class="tab-btn">4. I2C 1602 &amp; Buzzer</a>
+        <a href="security.html" class="tab-btn active">5. ระบบกันขโมย + Cam 3</a>
+        <a href="quiz.html" class="tab-btn">แบบถาม-ตอบ</a>
+        <a href="login.html" class="tab-btn">เข้าสู่ระบบ</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon" title="สลับโหมดสี">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <div class="section-header">
+      <span class="tag">Page 05 • Smart Burglar Alarm + Camera Module 3</span>
+      <h2>มินิโปรเจค: ระบบกันขโมยอัจฉริยะ &amp; Raspberry Pi Camera 3</h2>
+      <p>ผสานการทำงานของ PIR Motion Sensor / ประตูหน้าต่าง, <strong>Camera Module 3</strong> (Autofocus / EV / Snapshot), จอ I2C LCD 1602 และ Buzzer แจ้งเตือน</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>แผงควบคุมระบบกันขโมย (Arm / Disarm &amp; จำลองเหตุการณ์)</h3>
+
+        <div class="alarm-status-bar" id="alarmStatusBar">
+          <span>สถานะระบบ: <strong id="alarmModeLabel">DISARMED (ปิดระบบเฝ้าระวัง)</strong></span>
+          <button id="toggleArmBtn" class="btn-primary btn-sm">เปิดระบบเฝ้าระวัง (ARM)</button>
+        </div>
+
+        <div class="btn-row">
+          <button id="simMotionBtn" class="btn-outline">🚶 ตรวจจับการเคลื่อนไหว (PIR)</button>
+          <button id="simDoorBtn" class="btn-outline">🚪 เซนเซอร์ประตูเปิด</button>
+          <button id="resetAlarmBtn" class="btn-outline">🔄 รีเซ็ตสัญญาณเตือน</button>
+        </div>
+
+        <div class="lcd-bezel mt-20">
+          <div class="lcd-screen" id="secLcdScreen">
+            <div class="lcd-line" id="secLcd1">SYSTEM DISARMED</div>
+            <div class="lcd-line" id="secLcd2">READY TO ARM</div>
+          </div>
+        </div>
+
+        <h3 class="mt-20">Event Log</h3>
+        <div class="terminal" id="securityLog" style="height:130px;">
+          <div class="term-line">[INIT] Smart Burglar Alarm + Camera Module 3 ready.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="header-flex">
+          <h3>Raspberry Pi Camera Module 3 (CSI)</h3>
+          <span class="badge-logic" id="camStatusBadge">CAM 3: STANDBY</span>
+        </div>
+
+        <div class="cam3-box">
+          <div class="cam3-viewfinder" id="camViewfinder">
+            <div class="cam3-hud-top">
+              <span id="camLiveTag">● CAM 3 CSI</span>
+              <span id="camResolutionTag">1920x1080 • AF: Continuous</span>
+            </div>
+            <div class="cam3-center-readout" id="camCenterText">กล้องพร้อมใช้งาน (กดเปิดสตรีมหรือถ่ายภาพ)</div>
+            <div class="cam3-hud-bottom">
+              <span id="camLastCapture">ไฟล์ล่าสุด: ยังไม่มีภาพ</span>
+            </div>
+          </div>
+
+          <div class="cam3-controls mt-12">
+            <div class="control-group" style="margin-bottom:8px;">
+              <label>โหมดโฟกัส Camera 3 (Autofocus):</label>
+              <select id="camAfModeSelect" class="input-control">
+                <option value="Continuous" selected>Continuous Autofocus (จับโฟกัสต่อเนื่อง)</option>
+                <option value="Auto">Single Auto Focus (โฟกัสอัตโนมัติเมื่อถ่าย)</option>
+                <option value="Manual">Manual Focus (กำหนดระยะเอง)</option>
+              </select>
+            </div>
+
+            <div class="control-group" style="margin-bottom:10px;">
+              <label>ความสว่าง / Exposure EV: <strong id="camEvVal">0.0</strong></label>
+              <input type="range" id="camEvSlider" min="-2" max="2" step="0.5" value="0" class="range-control" />
+            </div>
+
+            <div class="btn-row" style="margin-top:0;">
+              <button type="button" id="toggleCamStreamBtn" class="btn-outline btn-sm">▶ เปิด/ปิด กล้อง</button>
+              <button type="button" id="captureCamBtn" class="btn-primary btn-sm">📸 ถ่ายภาพ Snapshot</button>
+              <label class="checkbox-item" style="margin:0;padding:5px 10px;">
+                <input type="checkbox" id="autoSnapOnAlarm" checked />
+                <span>ถ่ายอัตโนมัติเมื่อเกิดเหตุ</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-header mt-20">
+          <span>โค้ด Python ตัวอย่าง (picamera2 + Alarm)</span>
+          <button type="button" id="copyCamCodeBtn" class="btn-outline btn-sm">คัดลอก</button>
+        </div>
+        <pre class="code-block" id="camCodePreview"></pre>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Raspberry Pi 5 Multi-Page Lab • หน้า 5: ระบบกันขโมยอัจฉริยะ + Camera Pi 3</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

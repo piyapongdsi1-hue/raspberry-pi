@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>หน้า 2: ขา GPIO &amp; Interactive Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="gpio">
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="badge-pi">GPIO</span>
+        <h1>Raspberry Pi Lab</h1>
+      </div>
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn">1. ข้อมูล RPi</a>
+        <a href="gpio.html" class="tab-btn active">2. ขา GPIO</a>
+        <a href="led.html" class="tab-btn">LED Lab</a>
+        <a href="sensors.html" class="tab-btn">3. เซนเซอร์ DHT11</a>
+        <a href="lcd-buzzer.html" class="tab-btn">4. I2C 1602 &amp; Buzzer</a>
+        <a href="security.html" class="tab-btn">5. ระบบกันขโมย + Cam 3</a>
+        <a href="quiz.html" class="tab-btn">แบบถาม-ตอบ</a>
+        <a href="login.html" class="tab-btn">เข้าสู่ระบบ</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon" title="สลับโหมดสี">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <div class="section-header">
+      <span class="tag">Page 02 • Interactive GPIO Playground</span>
+      <h2>ขา GPIO ทำอะไรได้บ้าง &amp; สนามทดลองฮาร์ดแวร์จำลอง</h2>
+      <p>ทดลองเล่นสัญญาณ Digital Output, PWM Dimmer, รูปแบบไฟ LED, ปุ่มกด Pull-Up/Down และดูการเดินของสายจัมเปอร์บน Breadboard</p>
+    </div>
+
+    <div class="card mb-20">
+      <div class="header-flex">
+        <h3>Breadboard &amp; สายจัมเปอร์จำลอง (เชื่อมต่อกับ Raspberry Pi 3.3V Logic)</h3>
+        <span class="badge-logic" id="activePinBadge">Active: GPIO 18, 24, 25</span>
+      </div>
+
+      <div class="breadboard-mock">
+        <div class="bb-rail power-rail">+3.3V / +5V Bus</div>
+        <div class="bb-strip-zone">
+          <div class="bb-channel">
+            <div class="wire-pill wire-red">3.3V ➔ ปุ่ม (GPIO 17)</div>
+            <div class="wire-pill wire-yellow">GPIO 18 ➔ LED 1</div>
+            <div class="wire-pill wire-amber">GPIO 24 ➔ LED 2</div>
+            <div class="wire-pill wire-green">GPIO 25 ➔ LED 3</div>
+          </div>
+          <div class="bb-center-gap">BREADBOARD TIE-POINT MATRIX</div>
+          <div class="bb-channel">
+            <div class="led-cluster">
+              <div class="led-lamp-realistic red" id="bbLedRed"><span>1</span></div>
+              <div class="led-lamp-realistic yellow" id="bbLedYellow"><span>2</span></div>
+              <div class="led-lamp-realistic green" id="bbLedGreen"><span>3</span></div>
+            </div>
+            <div class="wire-pill wire-black">GND (Pin 6/9) ➔ ตัวต้านทาน 220Ω</div>
+          </div>
+        </div>
+        <div class="bb-rail gnd-rail">GND Bus (0V)</div>
+      </div>
+    </div>
+
+    <div class="grid-2 mt-20">
+      <div class="card">
+        <div class="header-flex">
+          <h3>แผนผัง 40-Pin Header (คลิกเลือกพิน)</h3>
+          <span class="badge-logic">3.3V Max</span>
+        </div>
+        <div class="pin-legend">
+          <span class="leg-item"><i class="dot pwr-5v"></i>5V</span>
+          <span class="leg-item"><i class="dot pwr-3v3"></i>3.3V</span>
+          <span class="leg-item"><i class="dot gnd"></i>GND</span>
+          <span class="leg-item"><i class="dot gpio"></i>GPIO</span>
+          <span class="leg-item"><i class="dot i2c"></i>I2C</span>
+          <span class="leg-item"><i class="dot spi"></i>SPI</span>
+          <span class="leg-item"><i class="dot uart"></i>UART</span>
+        </div>
+        <div class="header-board">
+          <div class="pin-column" id="pinColLeft"></div>
+          <div class="pin-column" id="pinColRight"></div>
+        </div>
+        <div class="pin-inspector" id="pinInspector">คลิกที่ขาพินบนบอร์ดเพื่อดูรายละเอียด Physical Pin และ BCM GPIO</div>
+
+        <h3 class="mt-20">GPIO Signal &amp; Event Log</h3>
+        <div class="terminal" id="gpioSignalLog" style="height:120px;">
+          <div class="term-line">[GPIO] Ready. Try LED patterns, PWM slider, or Push Button.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>แผงทดลองเล่นฮาร์ดแวร์ GPIO</h3>
+
+        <div class="hw-modules-stack">
+          <div class="hw-card dht-card">
+            <div class="dht-top">
+              <strong>โหมดไฟ 3 ดวง (GPIO 18 / 24 / 25)</strong>
+              <span class="dht-readout" id="ledPatternLabel">โหมด: ปิดทั้งหมด</span>
+            </div>
+            <div class="btn-row" style="margin-top:10px;">
+              <button type="button" class="btn-outline btn-sm active-mode" data-pattern="off">ดับหมด</button>
+              <button type="button" class="btn-outline btn-sm" data-pattern="blink">กระพริบพร้อมกัน</button>
+              <button type="button" class="btn-outline btn-sm" data-pattern="chase">ไฟวิ่ง (Chase)</button>
+              <button type="button" class="btn-outline btn-sm" data-pattern="traffic">ไฟจราจร</button>
+            </div>
+          </div>
+
+          <div class="hw-card" data-highlight-bcm="18">
+            <div class="hw-info">
+              <div class="led-bulb" id="simLedBulb"></div>
+              <div>
+                <strong>PWM LED Dimmer <span class="pin-tag">GPIO 18</span></strong>
+                <small>ความสว่าง: <strong id="pwmDutyText">0%</strong> (Duty Cycle)</small>
+              </div>
+            </div>
+            <input type="range" id="pwmDutySlider" min="0" max="100" value="0" class="range-mini" />
+          </div>
+
+          <div class="hw-card" data-highlight-bcm="17">
+            <div class="hw-info">
+              <div class="btn-indicator" id="simBtnIndicator">0</div>
+              <div>
+                <strong>Push Button <span class="pin-tag">GPIO 17</span></strong>
+                <small id="btnStatusText">โหมด Pull-Down • ปกติ LOW (0)</small>
+              </div>
+            </div>
+            <div class="btn-mini-group">
+              <button type="button" id="togglePullModeBtn" class="btn-outline btn-sm">Pull-Up/Down</button>
+              <button type="button" id="holdPushBtn" class="btn-primary btn-sm">กดค้าง</button>
+            </div>
+          </div>
+
+          <div class="hw-card" data-highlight-bcm="23">
+            <div class="hw-info">
+              <div class="servo-dial"><div class="servo-arm" id="simServoArm"></div></div>
+              <div>
+                <strong>Servo Motor <span class="pin-tag">GPIO 23 (PWM)</span></strong>
+                <small>องศา: <strong id="servoAngleVal">90°</strong></small>
+              </div>
+            </div>
+            <input type="range" id="servoAngleSlider" min="0" max="180" value="90" class="range-mini" />
+          </div>
+        </div>
+
+        <div class="code-header mt-20">
+          <span>โค้ด Python ตัวอย่าง (อัปเดตตามสถานะปัจจุบัน)</span>
+          <button type="button" id="copyGpioBtn" class="btn-outline btn-sm">คัดลอก</button>
+        </div>
+        <pre class="code-block" id="gpioCodePreview"></pre>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Raspberry Pi 5 Multi-Page Lab • หน้า 2: ขา GPIO &amp; Interactive Lab</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

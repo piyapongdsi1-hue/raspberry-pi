@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แบบถาม-ตอบ — Raspberry Pi Lab Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="quiz">
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="badge-pi">Q&amp;A</span>
+        <h1>Raspberry Pi Lab</h1>
+      </div>
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn">1. ข้อมูล RPi</a>
+        <a href="gpio.html" class="tab-btn">2. ขา GPIO</a>
+        <a href="led.html" class="tab-btn">LED Lab</a>
+        <a href="sensors.html" class="tab-btn">3. เซนเซอร์ DHT11</a>
+        <a href="lcd-buzzer.html" class="tab-btn">4. I2C 1602 &amp; Buzzer</a>
+        <a href="security.html" class="tab-btn">5. ระบบกันขโมย + Cam 3</a>
+        <a href="quiz.html" class="tab-btn active">แบบถาม-ตอบ</a>
+        <a href="login.html" class="tab-btn">เข้าสู่ระบบ</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon" title="สลับโหมดสี">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <div class="section-header">
+      <span class="tag">Interactive Q&amp;A • 5 Questions Per Topic</span>
+      <h2>แบบถาม-ตอบ ทดสอบความเข้าใจฮาร์ดแวร์ Raspberry Pi</h2>
+      <p>เลือกหัวข้อที่ต้องการฝึกทำ (หัวข้อละ 5 ข้อ สุ่มตำแหน่งช้อยส์ A–D กระจายทุกข้อ) กดเลือกคำตอบเพื่อดูเฉลยทันที หรือกดตรวจคะแนนรวมเมื่อทำเสร็จ</p>
+    </div>
+
+    <div class="card mb-20">
+      <div class="header-flex">
+        <h3>เลือกหัวข้อแบบถาม-ตอบ (5 ข้อ / หัวข้อ)</h3>
+        <span class="badge-logic" id="quizScoreBadge">เลือกแล้ว: 0 / 5 ข้อ</span>
+      </div>
+
+      <div class="btn-row" style="margin-top:8px;" id="quizTopicTabs">
+        <button type="button" class="btn-outline btn-sm active-mode" data-topic="gpio">1. ขา GPIO &amp; สัญญาณ</button>
+        <button type="button" class="btn-outline btn-sm" data-topic="led">2. วงจร LED &amp; ตัวต้านทาน</button>
+        <button type="button" class="btn-outline btn-sm" data-topic="sensors">3. เซนเซอร์ &amp; LCD/Buzzer</button>
+        <button type="button" class="btn-outline btn-sm" data-topic="security">4. ระบบกันขโมย &amp; Cam 3</button>
+      </div>
+
+      <div class="btn-row mt-12">
+        <button type="button" id="checkQuizBtn" class="btn-primary btn-sm">ตรวจคำตอบทั้งหมดในหัวข้อนี้</button>
+        <button type="button" id="shuffleQuizBtn" class="btn-outline btn-sm">🔀 สุ่มลำดับช้อยส์ใหม่</button>
+        <button type="button" id="resetQuizBtn" class="btn-outline btn-sm">🔄 ล้างคำตอบหัวข้อนี้</button>
+      </div>
+
+      <div class="result-banner" id="quizSummaryBox" style="display:none;"></div>
+    </div>
+
+    <div id="quizQuestionContainer" class="quiz-stack"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Raspberry Pi 5 Multi-Page Lab • แบบถาม-ตอบ หัวข้อละ 5 ข้อ</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

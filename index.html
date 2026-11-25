@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>หน้า 1: ข้อมูลเกี่ยวกับ Raspberry Pi</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="home">
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="badge-pi">RPi 5</span>
+        <h1>Raspberry Pi Lab</h1>
+      </div>
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn active">1. ข้อมูล RPi</a>
+        <a href="gpio.html" class="tab-btn">2. ขา GPIO</a>
+        <a href="led.html" class="tab-btn">LED Lab</a>
+        <a href="sensors.html" class="tab-btn">3. เซนเซอร์ DHT11</a>
+        <a href="lcd-buzzer.html" class="tab-btn">4. I2C 1602 &amp; Buzzer</a>
+        <a href="security.html" class="tab-btn">5. ระบบกันขโมย + Cam 3</a>
+        <a href="quiz.html" class="tab-btn">แบบถาม-ตอบ</a>
+        <a href="login.html" class="tab-btn">เข้าสู่ระบบ</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon" title="สลับโหมดสี">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <div class="section-header">
+      <span class="tag">Page 01 • Overview &amp; Architecture</span>
+      <h2>ข้อมูลเกี่ยวกับ Raspberry Pi (เน้นรุ่น Raspberry Pi 5)</h2>
+      <p>คอมพิวเตอร์บอร์ดเดี่ยว (Single-Board Computer) ขนาดเล็ก ประสิทธิภาพสูง ใช้พลังงานต่ำ เหมาะสำหรับงาน Edge AI, IoT, ระบบฝังตัว และเวิร์กชอปวิศวกรรม</p>
+    </div>
+
+    <div class="card mb-20">
+      <div class="header-flex">
+        <h3>ภาพจำลองบอร์ด Raspberry Pi 5 แบบหมุนได้ 360° &amp; เจาะลึกแต่ละพอร์ต</h3>
+        <span class="badge-logic" id="rpiBoardPartBadge">มุม: 0° • BCM2712</span>
+      </div>
+
+      <div class="board-rotate-toolbar mb-12">
+        <div class="rotate-slider-wrap">
+          <label for="boardRotateSlider">หมุนบอร์ด (360°): <strong id="boardRotateAngleText">0°</strong></label>
+          <input type="range" id="boardRotateSlider" min="-180" max="180" step="1" value="0" class="range-control" />
+        </div>
+        <div class="btn-row" style="margin-top:0;">
+          <button type="button" class="btn-outline btn-sm rotate-preset" data-angle="-90">↺ -90°</button>
+          <button type="button" class="btn-outline btn-sm rotate-preset" data-angle="0">0° (ตรง)</button>
+          <button type="button" class="btn-outline btn-sm rotate-preset" data-angle="90">↻ +90°</button>
+          <button type="button" class="btn-outline btn-sm rotate-preset" data-angle="180">180° (กลับหัว)</button>
+        </div>
+      </div>
+
+      <div class="rpi-board-svg-wrap">
+        <div class="rpi-board-rotator" id="rpiBoardRotator">
+          <svg viewBox="0 0 820 340" class="rpi-board-svg" role="img" aria-label="ภาพจำลองบอร์ด Raspberry Pi 5 หมุนได้">
+            <!-- PCB Base -->
+            <rect x="60" y="25" width="700" height="290" rx="22" fill="#15803d" stroke="#22c55e" stroke-width="3" />
+            <rect x="74" y="39" width="672" height="262" rx="15" fill="none" stroke="#4ade80" stroke-opacity="0.35" stroke-width="1.5" />
+
+            <!-- Mounting Holes -->
+            <circle cx="92" cy="57" r="10" fill="#070b14" stroke="#eab308" stroke-width="3" />
+            <circle cx="728" cy="57" r="10" fill="#070b14" stroke="#eab308" stroke-width="3" />
+            <circle cx="92" cy="283" r="10" fill="#070b14" stroke="#eab308" stroke-width="3" />
+            <circle cx="728" cy="283" r="10" fill="#070b14" stroke="#eab308" stroke-width="3" />
+
+            <!-- 40-Pin GPIO Header (Interactive) -->
+            <g class="rpi-hotspot" data-part="gpio" style="cursor:pointer;">
+              <rect x="145" y="46" width="380" height="34" rx="4" fill="#1e293b" stroke="#f8fafc" stroke-opacity="0.4" />
+              <text x="335" y="68" fill="#f8fafc" font-size="12" font-family="monospace" text-anchor="middle">40-PIN GPIO HEADER (3.3V LOGIC)</text>
+            </g>
+
+            <!-- CSI Camera / Display Connectors (Interactive) -->
+            <g class="rpi-hotspot" data-part="csi" style="cursor:pointer;">
+              <rect x="135" y="130" width="24" height="82" rx="3" fill="#f8fafc" stroke="#0f172a" stroke-width="2" />
+              <text x="147" y="175" fill="#0f172a" font-size="10" font-family="monospace" font-weight="bold" text-anchor="middle" transform="rotate(-90 147 175)">CSI / CAM</text>
+            </g>
+
+            <!-- PCIe Connector -->
+            <g class="rpi-hotspot" data-part="pcie" style="cursor:pointer;">
+              <rect x="245" y="252" width="76" height="22" rx="3" fill="#334155" stroke="#e2e8f0" />
+              <text x="283" y="267" fill="#e2e8f0" font-size="10" font-family="monospace" text-anchor="middle">PCIe 2.0</text>
+            </g>
+
+            <!-- SoC Broadcom BCM2712 (Interactive) -->
+            <g class="rpi-hotspot" data-part="soc" style="cursor:pointer;">
+              <rect x="315" y="122" width="115" height="115" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5" />
+              <text x="372" y="172" fill="#38bdf8" font-size="13" font-family="monospace" font-weight="bold" text-anchor="middle">BCM2712</text>
+              <text x="372" y="191" fill="#cbd5e1" font-size="10" font-family="monospace" text-anchor="middle">Quad Cortex-A76</text>
+            </g>
+
+            <!-- USB-C Power Port (Interactive) -->
+            <g class="rpi-hotspot" data-part="power" style="cursor:pointer;">
+              <rect x="44" y="105" width="22" height="44" rx="5" fill="#cbd5e1" stroke="#475569" stroke-width="2" />
+              <text x="18" y="131" fill="#f8fafc" font-size="10" font-family="monospace" text-anchor="middle" transform="rotate(-90 18 131)">5V/5A</text>
+            </g>
+
+            <!-- 2x Micro HDMI Ports (Interactive) -->
+            <g class="rpi-hotspot" data-part="hdmi" style="cursor:pointer;">
+              <rect x="44" y="175" width="20" height="26" rx="3" fill="#e2e8f0" stroke="#475569" stroke-width="1.5" />
+              <rect x="44" y="212" width="20" height="26" rx="3" fill="#e2e8f0" stroke="#475569" stroke-width="1.5" />
+              <text x="22" y="210" fill="#fde047" font-size="10" font-family="monospace" text-anchor="middle" transform="rotate(-90 22 210)">HDMI x2</text>
+            </g>
+
+            <!-- RJ45 Ethernet Port (Interactive) -->
+            <g class="rpi-hotspot" data-part="ethernet" style="cursor:pointer;">
+              <rect x="655" y="45" width="90" height="82" rx="5" fill="#cbd5e1" stroke="#334155" stroke-width="2" />
+              <text x="700" y="90" fill="#0f172a" font-size="12" font-family="monospace" font-weight="bold" text-anchor="middle">GbE LAN</text>
+            </g>
+
+            <!-- Stacked USB 3.0 & USB 2.0 Ports (Interactive) -->
+            <g class="rpi-hotspot" data-part="usb" style="cursor:pointer;">
+              <rect x="655" y="140" width="90" height="62" rx="5" fill="#2563eb" stroke="#93c5fd" stroke-width="2" />
+              <text x="700" y="175" fill="#ffffff" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle">USB 3.0 x2</text>
+              <rect x="655" y="212" width="90" height="62" rx="5" fill="#1e293b" stroke="#94a3b8" stroke-width="2" />
+              <text x="700" y="247" fill="#f8fafc" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle">USB 2.0 x2</text>
+            </g>
+
+            <!-- Board Label -->
+            <text x="485" y="275" fill="#dcfce7" font-size="16" font-family="monospace" font-weight="bold">Raspberry Pi 5</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="port-quick-buttons mt-12">
+        <button type="button" class="btn-outline btn-sm port-select-btn active-mode" data-part="gpio">40-Pin GPIO</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="power">USB-C 5V/5A</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="hdmi">2x micro HDMI</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="csi">CSI Camera</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="pcie">PCIe 2.0</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="ethernet">GbE LAN</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="usb">USB 3.0 / 2.0</button>
+        <button type="button" class="btn-outline btn-sm port-select-btn" data-part="soc">ชิป BCM2712</button>
+      </div>
+
+      <div class="port-detail-card mt-12" id="rpiPortDetailBox">
+        <div class="port-detail-head">
+          <strong id="portDetailTitle">40-Pin GPIO Header</strong>
+          <span class="pin-tag" id="portDetailSpec">3.3V Logic • Digital / PWM / I2C / SPI / UART</span>
+        </div>
+        <p id="portDetailDesc" class="mt-12">
+          ใช้รับ-ส่งสัญญาณดิจิทัล ควบคุมหลอด LED, มอเตอร์ PWM, เซนเซอร์ และสื่อสารกับอุปกรณ์ภายนอกผ่านโปรโตคอล I2C, SPI และ UART
+        </p>
+        <div class="port-detail-meta mt-12">
+          <div><strong>คำสั่ง/การใช้งาน:</strong> <code id="portDetailCmd">pinout</code></div>
+          <div><strong>ข้อควรระวัง:</strong> <span id="portDetailWarn">แรงดันสูงสุด 3.3V ห้ามต่อไฟ 5V เข้าขา GPIO โดยตรง</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>CPU &amp; GPU</h3>
+        <p>ใช้ชิป <strong>Broadcom BCM2712</strong> Quad-core ARM Cortex-A76 (64-bit, 2.4GHz) และกราฟิก <strong>VideoCore VII</strong> รองรับการประมวลผลวิดีโอและโมเดล Edge AI ได้ลื่นขึ้น</p>
+      </div>
+      <div class="card">
+        <h3>พอร์ตเชื่อมต่อ &amp; I/O</h3>
+        <p>มีพอร์ต <strong>2x micro HDMI (4Kp60)</strong>, <strong>2x USB 3.0</strong>, <strong>2x USB 2.0</strong>, Gigabit Ethernet, PCIe 2.0 x1, พอร์ต CSI Camera และพิน <strong>GPIO 40 ขา</strong></p>
+      </div>
+      <div class="card">
+        <h3>ระบบปฏิบัติการ &amp; เซ็ตอัป</h3>
+        <p>นิยมใช้ <strong>Raspberry Pi OS (64-bit)</strong> หรือ <strong>Debian 13 (Trixie)</strong> รองรับ <code>picamera2</code>, <code>gpiozero</code> และทำงานร่วมกับหน้าจอหรือ Capture Card ได้สะดวก</p>
+      </div>
+    </div>
+
+    <div class="card mt-20">
+      <h3>ตารางสรุปข้อมูลสำคัญของ Raspberry Pi 5</h3>
+      <div class="table-wrap">
+        <table class="info-table">
+          <thead>
+            <tr>
+              <th>หมวดหมู่</th>
+              <th>รายละเอียด</th>
+              <th>ข้อควรระวัง / คำแนะนำ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>OS ที่แนะนำ</strong></td>
+              <td>Raspberry Pi OS (64-bit) / Debian 13 (Trixie)</td>
+              <td>เลือก 64-bit เพื่อรองรับ <code>picamera2</code> และไลบรารีสมัยใหม่</td>
+            </tr>
+            <tr>
+              <td><strong>การจ่ายไฟ</strong></td>
+              <td>USB-C 5V / 5A (PD)</td>
+              <td>หลีกเลี่ยงไฟตกเมื่อต่อกล้อง Camera Module 3 หรืออุปกรณ์ USB หลายตัว</td>
+            </tr>
+            <tr>
+              <td><strong>ระดับแรงดัน GPIO</strong></td>
+              <td><strong>3.3V Logic</strong> ทุกขา GPIO</td>
+              <td>ห้ามต่อไฟ 5V เข้าขา GPIO โดยตรงเพื่อป้องกันบอร์ดเสียหาย</td>
+            </tr>
+            <tr>
+              <td><strong>พอร์ตกล้อง CSI</strong></td>
+              <td>MIPI CSI-2 (ใช้สายแพให้ตรงด้าน)</td>
+              <td>ปลดล็อกคลิปพอร์ตอย่างเบามือก่อนเสียบหรือถอดสายแพกล้อง</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2 mt-20">
+      <div class="card">
+        <h3>คำนวณกำลังไฟชุดอุปกรณ์ (Power Calculator)</h3>
+        <label class="checkbox-item">
+          <input type="checkbox" class="power-item" data-watt="15" checked />
+          <span>Raspberry Pi 5 + โหลดประมวลผล (~15W)</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" class="power-item" data-watt="3" checked />
+          <span>Camera Module 3 + เซนเซอร์/LED (~3W)</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" class="power-item" data-watt="15" />
+          <span>หน้าจอ / Capture Card / โหลดเสริม (~15W)</span>
+        </label>
+        <div class="result-banner" id="powerResult">กำลังไฟรวมโดยประมาณ: <strong>18W</strong></div>
+      </div>
+
+      <div class="card">
+        <h3>ค้นหาคำสั่ง Linux / Raspberry Pi ที่ใช้บ่อย</h3>
+        <input type="text" id="cmdSearchInput" class="input-control" placeholder="ค้นหา เช่น temp, camera, i2c, pinout..." />
+        <div id="cmdList" class="cmd-list mt-12"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Raspberry Pi 5 Multi-Page Lab • หน้า 1: ข้อมูลเกี่ยวกับ Raspberry Pi</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

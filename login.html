@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เข้าสู่ระบบ — Raspberry Pi Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="login">
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="badge-pi">LOGIN</span>
+        <h1>Raspberry Pi Lab</h1>
+      </div>
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn">1. ข้อมูล RPi</a>
+        <a href="gpio.html" class="tab-btn">2. ขา GPIO</a>
+        <a href="led.html" class="tab-btn">LED Lab</a>
+        <a href="sensors.html" class="tab-btn">3. เซนเซอร์ DHT11</a>
+        <a href="lcd-buzzer.html" class="tab-btn">4. I2C 1602 &amp; Buzzer</a>
+        <a href="security.html" class="tab-btn">5. ระบบกันขโมย + Cam 3</a>
+        <a href="quiz.html" class="tab-btn">แบบถาม-ตอบ</a>
+        <a href="login.html" class="tab-btn active">เข้าสู่ระบบ</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon" title="สลับโหมดสี">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <div class="section-header">
+      <span class="tag">Simple Auth • Username &amp; Password</span>
+      <h2>เข้าสู่ระบบใช้งาน Raspberry Pi Lab</h2>
+      <p>กรอกชื่อและรหัสผ่านเพื่อเข้าสู่ระบบ (จำลองใช้งานในหน้าเว็บแล็บ)</p>
+    </div>
+
+    <div class="card login-card">
+      <div id="loggedInBox" class="result-banner mb-20" style="display:none;">
+        กำลังเข้าสู่ระบบด้วยชื่อ: <strong id="currentUserLabel">-</strong>
+        <div class="btn-row mt-12">
+          <a href="index.html" class="btn-primary btn-sm" style="text-decoration:none;">ไปที่หน้าหลัก</a>
+          <button type="button" id="logoutBtn" class="btn-outline btn-sm">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <form id="simpleLoginForm">
+        <div class="control-group">
+          <label for="loginUsername">ชื่อ (Username)</label>
+          <input
+            type="text"
+            id="loginUsername"
+            class="input-control"
+            placeholder="กรอกชื่อผู้ใช้"
+            required
+          />
+        </div>
+
+        <div class="control-group">
+          <label for="loginPassword">รหัสผ่าน (Password)</label>
+          <input
+            type="password"
+            id="loginPassword"
+            class="input-control"
+            placeholder="กรอกรหัสผ่าน"
+            required
+          />
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+          <button type="button" id="clearLoginBtn" class="btn-outline">ล้างช่องกรอก</button>
+        </div>
+      </form>
+
+      <div id="loginMessage" class="result-banner mt-12" style="display:none;"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Raspberry Pi 5 Multi-Page Lab • หน้าเข้าสู่ระบบ</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

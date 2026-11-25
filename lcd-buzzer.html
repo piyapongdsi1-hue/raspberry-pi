@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>หน้า 4: จอ I2C 1602 และระบบเสียง Buzzer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="lcd-buzzer">
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="logo">
+        <span class="badge-pi">I2C+BUZ</span>
+        <h1>Raspberry Pi Lab</h1>
+      </div>
+      <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn">1. ข้อมูล RPi</a>
+        <a href="gpio.html" class="tab-btn">2. ขา GPIO</a>
+        <a href="led.html" class="tab-btn">LED Lab</a>
+        <a href="sensors.html" class="tab-btn">3. เซนเซอร์ DHT11</a>
+        <a href="lcd-buzzer.html" class="tab-btn active">4. I2C 1602 &amp; Buzzer</a>
+        <a href="security.html" class="tab-btn">5. ระบบกันขโมย + Cam 3</a>
+        <a href="quiz.html" class="tab-btn">แบบถาม-ตอบ</a>
+        <a href="login.html" class="tab-btn">เข้าสู่ระบบ</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="btn-icon" title="สลับโหมดสี">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <div class="section-header">
+      <span class="tag">Page 04 • I2C 16x2 LCD &amp; Buzzer Alert</span>
+      <h2>จอแสดงผล I2C 1602 &amp; ระบบเสียงแจ้งเตือน Buzzer</h2>
+      <p>ลองพิมพ์ข้อความแสดงผลบนจอ LCD 16x2 (Address <code>0x27</code>) เลือกข้อความด่วน หรือกดทดสอบเสียงแจ้งเตือนจาก Buzzer (GPIO 22)</p>
+    </div>
+
+    <div class="card mb-20">
+      <h3>ผังการต่อสาย I2C LCD 1602 กับ Raspberry Pi</h3>
+      <div class="wiring-strip">
+        <span class="wire-pill wire-red">VCC ➔ 5V (Pin 2/4)</span>
+        <span class="wire-pill wire-black">GND ➔ GND (Pin 6)</span>
+        <span class="wire-pill wire-yellow">SDA ➔ GPIO 2 (Pin 3)</span>
+        <span class="wire-pill wire-green">SCL ➔ GPIO 3 (Pin 5)</span>
+        <span class="wire-pill wire-amber">Buzzer + ➔ GPIO 22 (Pin 15)</span>
+      </div>
+    </div>
+
+    <div class="grid-2 mt-20">
+      <div class="card">
+        <h3>กรอกข้อความลงจอ I2C LCD 1602 (สูงสุด 16 ตัวอักษร/บรรทัด)</h3>
+
+        <div class="control-group">
+          <label for="lcdLine1Input">บรรทัดที่ 1 (Row 1):</label>
+          <input type="text" id="lcdLine1Input" maxlength="16" value="RASPBERRY PI 5" class="input-control" />
+        </div>
+
+        <div class="control-group">
+          <label for="lcdLine2Input">บรรทัดที่ 2 (Row 2):</label>
+          <input type="text" id="lcdLine2Input" maxlength="16" value="I2C LCD 1602 OK" class="input-control" />
+        </div>
+
+        <div class="btn-row" style="margin-top:8px;margin-bottom:10px;">
+          <button type="button" class="btn-outline btn-sm preset-lcd" data-l1="HELLO JUNIOR!" data-l2="RPI LAB READY">ข้อความต้อนรับ</button>
+          <button type="button" class="btn-outline btn-sm preset-lcd" data-l1="TEMP: 32.5 C" data-l2="HUM: 65 %">ค่าเซนเซอร์</button>
+          <button type="button" class="btn-outline btn-sm preset-lcd" data-l1="INTRUDER ALERT" data-l2="CHECK DOOR!">แจ้งเตือน</button>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" id="toggleBacklightBtn" class="btn-outline">💡 เปิด/ปิด Backlight</button>
+          <button type="button" id="toggleScrollLcdBtn" class="btn-outline">↔ เลื่อนข้อความ</button>
+          <button type="button" id="clearLcdBtn" class="btn-outline">ล้างจอ</button>
+        </div>
+
+        <div class="lcd-bezel mt-20">
+          <div class="lcd-screen" id="lcdScreen">
+            <div class="lcd-line" id="lcdOut1">RASPBERRY PI 5</div>
+            <div class="lcd-line" id="lcdOut2">I2C LCD 1602 OK</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>ระบบเสียงแจ้งเตือนด้วย Buzzer (GPIO 22)</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:14px;">
+          กดจำลองเหตุการณ์เพื่อฟังเสียง Buzzer ผ่าน Web Audio API และดูข้อความอัปเดตบนจอ LCD
+        </p>
+
+        <div class="hw-card mb-12">
+          <div class="hw-info">
+            <div class="buzzer-icon" id="simBuzzerIcon">🔊</div>
+            <div>
+              <strong>Piezo Buzzer <span class="pin-tag">GPIO 22</span></strong>
+              <small id="buzzerStatusText">พร้อมส่งเสียงแจ้งเตือน</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" id="triggerWarningBtn" class="btn-outline">⚠️ เกิดเหตุเตือน (Beep)</button>
+          <button type="button" id="triggerCriticalBtn" class="btn-primary">🚨 เกิดเหตุฉุกเฉิน (Alarm)</button>
+          <button type="button" id="triggerSuccessBtn" class="btn-outline">✅ ยืนยันสำเร็จ (Chime)</button>
+        </div>
+
+        <div class="code-header mt-20">
+          <span>โค้ด Python ตัวอย่าง (I2C 1602 + Buzzer)</span>
+          <button type="button" id="copyLcdBtn" class="btn-outline btn-sm">คัดลอก</button>
+        </div>
+        <pre class="code-block" id="lcdCodePreview"></pre>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Raspberry Pi 5 Multi-Page Lab • หน้า 4: จอ I2C 1602 และระบบเสียง Buzzer</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
